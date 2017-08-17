@@ -1,30 +1,35 @@
-test: isolation_add_remove_node
-test: isolation_add_node_vs_reference_table_operations
-test: isolation_create_table_vs_add_remove_node
+#test: isolation_add_remove_node
+#test: isolation_add_node_vs_reference_table_operations
+#test: isolation_create_table_vs_add_remove_node
 
 # tests that change node metadata should precede
 # isolation_cluster_management such that tests
 # that come later can be parallelized
 test: isolation_cluster_management
 
-test: isolation_hash_copy_vs_all
-test: isolation_append_copy_vs_all
-test: isolation_range_copy_vs_all
-test: isolation_select_vs_all
-test: isolation_insert_vs_all
-test: isolation_update_vs_all
+#test: isolation_hash_copy_vs_all
+#test: isolation_append_copy_vs_all
+#test: isolation_range_copy_vs_all
+test: isolation_reference_copy_vs_all
+#test: isolation_select_vs_all
+#test: isolation_insert_vs_all
+test: isolation_insert_select_vs_all
+#test: isolation_update_vs_all
+test: isolation_delete_vs_all
+test: isolation_truncate_vs_all
+test: isolation_drop_vs_all
 
-test: isolation_dml_vs_repair isolation_copy_placement_vs_copy_placement
+#test: isolation_dml_vs_repair isolation_copy_placement_vs_copy_placement
 
-test: isolation_concurrent_dml isolation_data_migration
-test: isolation_drop_shards isolation_copy_placement_vs_modification
-test: isolation_insert_vs_vacuum isolation_transaction_recovery
-test: isolation_distributed_transaction_id isolation_progress_monitoring
-test: isolation_dump_local_wait_edges isolation_dump_global_wait_edges
+#test: isolation_concurrent_dml isolation_data_migration
+#test: isolation_drop_shards isolation_copy_placement_vs_modification
+#test: isolation_insert_vs_vacuum isolation_transaction_recovery
+#test: isolation_distributed_transaction_id isolation_progress_monitoring
+#test: isolation_dump_local_wait_edges isolation_dump_global_wait_edges
 
-test: isolation_replace_wait_function
-test: isolation_distributed_deadlock_detection
+#test: isolation_replace_wait_function
+#test: isolation_distributed_deadlock_detection
 
 # creating a restore point briefly blocks all
 # writes, run this test serially.
-test: isolation_create_restore_point
+#test: isolation_create_restore_point
