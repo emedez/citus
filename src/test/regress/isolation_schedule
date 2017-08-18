@@ -7,6 +7,9 @@
 # that come later can be parallelized
 test: isolation_cluster_management
 
+
+test: isolation_truncate_vs_all
+
 #test: isolation_hash_copy_vs_all
 #test: isolation_append_copy_vs_all
 #test: isolation_range_copy_vs_all

@@ -5,6 +5,9 @@
 # create range distributed table to test behavior of DELETE in concurrent operations
 setup
 {
+	SELECT citus.replace_isolation_tester_func();
+	SELECT citus.refresh_isolation_tester_prepared_statement();
+
 	SET citus.shard_replication_factor TO 1;
 	CREATE TABLE delete_hash(id integer, data text);
 	SELECT create_distributed_table('delete_hash', 'id');
@@ -68,7 +71,7 @@ permutation "s1-initialize" "s1-ddl-create-index" "s1-begin" "s2-begin" "s1-dele
 permutation "s1-initialize" "s1-begin" "s1-delete" "s2-ddl-create-index-concurrently" "s1-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s2-begin" "s1-delete" "s2-ddl-add-column" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-initialize" "s1-ddl-add-column" "s1-begin" "s2-begin" "s1-delete" "s2-ddl-drop-column" "s1-commit" "s2-commit" "s1-select-count"
-permutation "s1-initialize" "s1-begin" "s2-begin" "s1-delete" "s2-table-size" "s1-commit" "s2-commit" "s1-select-count"
+#permutation "s1-initialize" "s1-begin" "s2-begin" "s1-delete" "s2-table-size" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s2-begin" "s1-delete" "s2-master-modify-multiple-shards" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-drop" "s1-create-non-distributed-table" "s1-initialize" "s1-begin" "s2-begin" "s1-delete" "s2-distribute-table" "s1-commit" "s2-commit" "s1-select-count"
 
@@ -80,6 +83,6 @@ permutation "s1-initialize" "s1-begin" "s2-begin" "s1-ddl-create-index" "s2-dele
 permutation "s1-initialize" "s1-ddl-create-index" "s1-begin" "s2-begin" "s1-ddl-drop-index" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s2-begin" "s1-ddl-add-column" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-initialize" "s1-ddl-add-column" "s1-begin" "s2-begin" "s1-ddl-drop-column" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"
-permutation "s1-initialize" "s1-begin" "s2-begin" "s1-table-size" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"
+#permutation "s1-initialize" "s1-begin" "s2-begin" "s1-table-size" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s2-begin" "s1-master-modify-multiple-shards" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"
 permutation "s1-drop" "s1-create-non-distributed-table" "s1-initialize" "s1-begin" "s2-begin" "s1-distribute-table" "s2-delete" "s1-commit" "s2-commit" "s1-select-count"

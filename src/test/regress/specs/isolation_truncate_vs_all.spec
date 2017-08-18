@@ -5,6 +5,9 @@
 # create range distributed table to test behavior of TRUNCATE in concurrent operations
 setup
 {
+	SELECT citus.replace_isolation_tester_func();
+	SELECT citus.refresh_isolation_tester_prepared_statement();
+
 	SET citus.shard_replication_factor TO 1;
 	CREATE TABLE truncate_hash(id integer, data text);
 	SELECT create_distributed_table('truncate_hash', 'id');

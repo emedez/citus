@@ -45,7 +45,6 @@ step "s1-ddl-unique-constraint" { ALTER TABLE reference_copy ADD CONSTRAINT refe
 step "s1-table-size" { SELECT citus_total_relation_size('reference_copy'); }
 step "s1-master-modify-multiple-shards" { SELECT master_modify_multiple_shards('DELETE FROM reference_copy;'); }
 step "s1-master-apply-delete-command" { SELECT master_apply_delete_command('DELETE FROM reference_copy WHERE id <= 4;'); }
-step "s1-master-drop-all-shards" { SELECT master_drop_all_shards('reference_copy'::regclass, 'public', 'reference_copy'); }
 step "s1-create-non-distributed-table" { CREATE TABLE reference_copy(id integer, data text, int_data int); COPY reference_copy FROM PROGRAM 'echo 0, a, 0\\n1, b, 1\\n2, c, 2\\n3, d, 3\\n4, e, 4' WITH CSV; }
 step "s1-distribute-table" { SELECT create_reference_table('reference_copy'); }
 step "s1-commit" { COMMIT; }
@@ -78,7 +77,7 @@ step "s2-master-modify-multiple-shards" { SELECT master_modify_multiple_shards('
 step "s2-master-apply-delete-command" { SELECT master_apply_delete_command('DELETE FROM reference_copy WHERE id <= 4;'); }
 step "s2-master-drop-all-shards" { SELECT master_drop_all_shards('reference_copy'::regclass, 'public', 'reference_copy'); }
 step "s2-create-non-distributed-table" { CREATE TABLE reference_copy(id integer, data text, int_data int); COPY reference_copy FROM PROGRAM 'echo 0, a, 0\\n1, b, 1\\n2, c, 2\\n3, d, 3\\n4, e, 4' WITH CSV; }
-step "s2-distribute-table" { SELECT SELECT create_reference_table('reference_copy'); }
+step "s2-distribute-table" { SELECT create_reference_table('reference_copy'); }
 
 # permutations - COPY vs COPY
 permutation "s1-initialize" "s1-begin" "s1-copy" "s2-copy" "s1-commit" "s1-select-count"
@@ -100,8 +99,6 @@ permutation "s1-initialize" "s1-begin" "s1-copy" "s2-ddl-add-column" "s1-commit"
 permutation "s1-initialize" "s1-ddl-add-column" "s1-begin" "s1-copy-additional-column" "s2-ddl-drop-column" "s1-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s1-copy" "s2-table-size" "s1-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s1-copy" "s2-master-modify-multiple-shards" "s1-commit" "s1-select-count"
-permutation "s1-initialize" "s1-begin" "s1-copy" "s2-master-apply-delete-command" "s1-commit" "s1-select-count"
-permutation "s1-initialize" "s1-begin" "s1-copy" "s2-master-drop-all-shards" "s1-commit" "s1-select-count"
 permutation "s1-drop" "s1-create-non-distributed-table" "s1-initialize" "s1-begin" "s1-copy" "s2-distribute-table" "s1-commit" "s1-select-count"
 
 # permutations - COPY second
@@ -120,6 +117,4 @@ permutation "s1-initialize" "s1-begin" "s1-ddl-add-column" "s2-copy" "s1-commit"
 permutation "s1-initialize" "s1-ddl-add-column" "s1-begin" "s1-ddl-drop-column" "s2-copy" "s1-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s1-table-size" "s2-copy" "s1-commit" "s1-select-count"
 permutation "s1-initialize" "s1-begin" "s1-master-modify-multiple-shards" "s2-copy" "s1-commit" "s1-select-count"
-permutation "s1-initialize" "s1-begin" "s1-master-apply-delete-command" "s2-copy" "s1-commit" "s1-select-count"
-permutation "s1-initialize" "s1-begin" "s1-master-drop-all-shards" "s2-copy" "s1-commit" "s1-select-count"
 permutation "s1-drop" "s1-create-non-distributed-table" "s1-initialize" "s1-begin" "s1-distribute-table" "s2-copy" "s1-commit" "s1-select-count"
